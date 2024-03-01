@@ -1,0 +1,94 @@
+---
+title: "lab_05"
+author: "Yuxi"
+date: 2024-02-29
+format: 
+  html:
+    toc: true
+---
+
+## Data description
+
+<!--
+
+the nature of the data
+the source of the data
+the acquisition strategy that will be used
+the format of the data
+the license of the data
+
+-->
+
+the data that I'm downloading is the Swithchboard Dialog Act Corpus.
+This corpus is a set of conversation...
+
+The data is in an archived file on the [LDC](https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz). In this case, I'm going to download unarchived, and save the contents of the corpus to the `data/original/swda/` directory.
+
+<!-- Note: the path from the current file is:
+`../data/original/swda/` -->
+
+```{r}
+#| label: setup_packages
+#| message: false
+
+# load packages
+library(dplyr)
+library(fs)
+```
+the first step in the process is to try out using download.file() to acquire the archived file.
+
+```{r}
+#| label: download-archive-test
+
+# URL
+"https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz"
+
+# set`url` to the file address
+file_url <- "https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz"
+
+dest_file <- "../data/original/swda.tar.gz"
+
+download.file(url = "https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz", destfile = "../data/original/swda.tar.gz")
+
+```
+
+now the file is at `../data/original/swda.tag.gz`.
+Since it is an archived file, I will need to unarchive it. It's extension is `tar.gz` so I will use the `untar()` function from base R.
+
+```{r}
+#| label: unarchive-test
+
+untar(tarfile = "../data/original/swda.tar.gz", exdir = "../data/original/swda/")
+
+```
+
+## Data original file
+
+```{r}
+#| label: data-origin-file
+
+# Save the data origin file as a table
+data_origin <- data.frame(
+  Data_Type = c("SWDA Corpus"),
+  Source = c("LDC97S62"),
+  Acquisition_Strategy = c("Programmatic download and extraction"),
+  Format = c("Text files"),
+  License = c("Refer to the license information")
+)
+
+# Save the data origin file as a CSV
+write.csv(data_origin, file.path("../data/original", "data_origin.csv"), row.names = FALSE)
+```
+
+## Accessement my progress
+
+# What did you learn?
+
+I learned how to programmatically download and extract data using R. Specifically, I gained insights into handling archived files, such as tar.gz.
+
+# What did you find most/least challenging?
+
+I feel confused why in the "#| label: download-archive-test", when I run the code, it suggests "trying URL 'https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz'
+Content type 'application/octet-stream' length 4453510 bytes (4.2 MB)
+==================================================
+downloaded 4.2 MB."
