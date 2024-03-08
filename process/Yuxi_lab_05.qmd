@@ -2,7 +2,7 @@
 title: "lab_05"
 author: "Yuxi"
 date: 2024-02-29
-format: 
+format:
   html:
     toc: true
 ---
@@ -20,7 +20,7 @@ the license of the data
 -->
 
 the data that I'm downloading is the Swithchboard Dialog Act Corpus.
-This corpus is a set of conversation...
+This corpus is a set of conversation... <!-- continue.. what I type in class is just to get your started, you will definitely need to add more information. -->
 
 The data is in an archived file on the [LDC](https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz). In this case, I'm going to download unarchived, and save the contents of the corpus to the `data/original/swda/` directory.
 
@@ -35,34 +35,50 @@ The data is in an archived file on the [LDC](https://catalog.ldc.upenn.edu/docs/
 library(dplyr)
 library(fs)
 ```
-the first step in the process is to try out using download.file() to acquire the archived file.
+
+the first step in the process is to try out using `download.file()` to acquire the archived file.
 
 ```{r}
 #| label: download-archive-test
-
-# URL
-"https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz"
 
 # set`url` to the file address
 file_url <- "https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz"
 
 dest_file <- "../data/original/swda.tar.gz"
 
-download.file(url = "https://catalog.ldc.upenn.edu/docs/LDC97S62/swb1_dialogact_annot.tar.gz", destfile = "../data/original/swda.tar.gz")
-
+download.file(url = file_url, destfile = dest_file)
 ```
 
-now the file is at `../data/original/swda.tag.gz`.
+<!--
+
+You created the `file_url` and the `dest_file` variables. You should use them in the `download.file()` function, that's why we created them.
+
+-->
+
+Now the file is at `../data/original/swda.tag.gz`.
 Since it is an archived file, I will need to unarchive it. It's extension is `tar.gz` so I will use the `untar()` function from base R.
 
 ```{r}
 #| label: unarchive-test
 
-untar(tarfile = "../data/original/swda.tar.gz", exdir = "../data/original/swda/")
+untar(tarfile = dest_file, exdir = "../data/original/swda/")
 
 ```
 
-## Data original file
+<!-- You can still use the `dest_file` for the file to unarchive in the `untar()` function. -->
+
+<!--
+
+Note:
+
+What you created in the previous steps is the basic structure of the code to download and unarchive the file. To make the code more robust, and more reproducible, you should also consider
+
+1. using the `temp_file()` function to avoid having to manually delete the file after the process is done.
+2. using a control-statement (`if`) to check if the data directory already exists before downloading it again. If the data directory exists, you can skip the download and unarchive steps in the code. Look back at the Recipe for more information on how to do this. Or contact me.
+
+-->
+
+## Data origin file
 
 ```{r}
 #| label: data-origin-file
@@ -80,11 +96,21 @@ data_origin <- data.frame(
 write.csv(data_origin, file.path("../data/original", "data_origin.csv"), row.names = FALSE)
 ```
 
-## Accessement my progress
+<!--
+
+The above code works, but to followd the format that is provided in the textbook and the recipe, you can use the `qtalrkit::create_data_dictionary()` function to create the data origin file template. Then you will update the information in the file.
+
+The `qtalrkit::create_data_dictionary()` function provides a template for the more complete and informative data origin file.
+
+-->
+
+## Assess my progress
 
 # What did you learn?
 
-I learned how to programmatically download and extract data using R. Specifically, I gained insights into handling archived files, such as tar.gz.
+I learned how to programmatically download and extract data using R. Specifically, I gained insights into handling archived files, such as `tar.gz`.
+
+<!-- You did great. -->
 
 # What did you find most/least challenging?
 
@@ -92,3 +118,6 @@ I feel confused why in the "#| label: download-archive-test", when I run the cod
 Content type 'application/octet-stream' length 4453510 bytes (4.2 MB)
 ==================================================
 downloaded 4.2 MB."
+
+
+<!-- This feedback is just telling you that the file is downloading. It appears in red, but it is not an error, just a message in the console. -->
